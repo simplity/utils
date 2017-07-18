@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <bundle id="org.simplity.eclipse.plugin.validator" version="1.0.0.qualifier">
+      <category name="validator"/>
+   </bundle>
+   <category-def name="validator" label="Simplity Validator"/>
+</site>

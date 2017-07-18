@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="sampleBuilder"
+         name="Sample Project Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true">
+         <run
+               class="org.simplity.eclipse.plugin.validator.builder.SampleBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="sampleNature"
+         name="Sample Project Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="org.simplity.eclipse.plugin.validator.builder.SampleNature">
+         </run>
+      </runtime>
+      <builder
+            id="org.simplity.eclipse.plugin.validator.sampleBuilder">
+      </builder>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="Sample Project Nature commands"
+            id="org.simplity.eclipse.plugin.validator.sampleNature.category">
+      </category>
+      <command
+            name="Add/RemoveSample Project Nature"
+            defaultHandler="org.simplity.eclipse.plugin.validator.builder.AddRemoveSampleNatureHandler"
+            categoryId="org.simplity.eclipse.plugin.validator.sampleNature.category"
+            id="org.simplity.eclipse.plugin.validator.addRemoveSampleNature">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.projectConfigure?after=additions">
+         <command
+               commandId="org.simplity.eclipse.plugin.validator.addRemoveSampleNature"
+               label="Disable Sample builder"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                        <test
+                              value="org.simplity.eclipse.plugin.validator.sampleNature"
+                              property="org.eclipse.core.resources.projectNature">
+                        </test>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.simplity.eclipse.plugin.validator.addRemoveSampleNature"
+               label="Enable Sample builder"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                        <not>
+                           <test
+                                 value="org.simplity.eclipse.plugin.validator.sampleNature"
+                                 property="org.eclipse.core.resources.projectNature">
+                           </test>
+                        </not>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         id="xmlProblem"
+         name="XML Problem"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+
+  <extension point = "org.eclipse.wst.xml.core.catalogContributions">
+        <catalogContribution id="default">
+            <public publicId="http://www.simplity.org/schema"
+                    uri="xsd/kernel.xsd" 
+                    webURL="http://www.simplity.org/schema" />              
+      </catalogContribution>
+    </extension> 
+
+</plugin>

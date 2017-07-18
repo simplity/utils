@@ -23,61 +23,16 @@ public class ConverterListener extends AbstractJavaListener {
 		rewriter = new TokenStreamRewriter(tokens);
 	}
 
-	@Override
-	public void exitPackageDeclaration(PackageDeclarationContext ctx) {
-
-		startImportToken = ctx.stop;
-
-		for (TypeDeclarationContext typeDecls : ((CompilationUnitContext) (ctx.getParent())).typeDeclaration()) {
-			if (typeDecls.classDeclaration() != null) {
-				ClassDeclarationContext classCtx = typeDecls.classDeclaration();
-				startDeclToken = classCtx.classBody().start;
-				name = classCtx.Identifier();
-				break;
-			}
-			if (typeDecls.enumDeclaration() != null) {
-				EnumDeclarationContext enumCtx = typeDecls.enumDeclaration();
-				if (enumCtx.enumBodyDeclarations() != null) {
-					startDeclToken = enumCtx.enumBodyDeclarations().start;
-					name = enumCtx.Identifier();
-				}
-				break;
-			}
-		}
-
-	}
+	public void enterImportDeclaration(ImportDeclarationContext ctx) {
+		if(ctx.getText().contains("org.simplity.kernel.Tracer")){
+			rewriter.delete(ctx.start,ctx.stop);
+		};
+	};
 
 	@Override
 	public void enterStatementExpression(StatementExpressionContext ctx) {
-
 		if (ctx.getText().startsWith("Tracer.trace")) {
-			if (ctx.expression().expressionList().expression().size() == 1) {
-				String logStatement = "\nlogger.log(Level.INFO, " + ctx.expression().expressionList().getText()
-						+ " );\n";
-				rewriter.insertBefore(ctx.start, logStatement);
-			}
-			if (ctx.expression().expressionList().expression().size() == 2) {
-				String logStatement = "\nlogger.log(Level.SEVERE, " 
-									 + ctx.expression().expressionList().expression(1).getText()
-									 + ","
-									 + ctx.expression().expressionList().expression(0).getText()
-									 + " );\n";
-				rewriter.insertBefore(ctx.start, logStatement);
-			}
-
-			if (!flagImportDecDone) {
-				// add the required imports
-				String field = "\nimport org.slf4j.Logger;";
-				rewriter.insertAfter(startImportToken, field);
-				field = "\nimport java.util.logging.Logger;";
-				rewriter.insertAfter(startImportToken, field);
-
-				// add the required logger declaration
-				field = "\nfinal static Logger logger = Logger.getLogger(" + name + ".class.getName());\n";
-				rewriter.insertAfter(startDeclToken, field);
-				
-				flagImportDecDone = true;
-			}
+			rewriter.delete(ctx.getParent().start,ctx.getParent().stop);
 		}
 	}
 
