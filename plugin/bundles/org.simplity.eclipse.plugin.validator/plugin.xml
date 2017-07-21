@@ -113,4 +113,31 @@
       </catalogContribution>
     </extension> 
 
+	<extension
+    	point="org.eclipse.ui.newWizards">
+    	<category
+            id="simplity"
+            name="Simplity"/>
+		<wizard
+			category="simplity"
+            class="org.simplity.eclipse.plugin.validator.wizard.NewApplicationXmlWizard"
+            descriptionImage="icons/wizards/newfile_wiz.gif"
+            icon="icons/objects/x.gif"
+            id="org.simplity.eclipse.plugin.validator.xmlfile.NewApplicationWizard"
+            name="Simplity Application Xml"/>
+        <wizard
+			category="simplity"
+            class="org.simplity.eclipse.plugin.validator.wizard.NewServiceXmlWizard"
+            descriptionImage="icons/wizards/newfile_wiz.gif"
+            icon="icons/objects/x.gif"
+            id="org.simplity.eclipse.plugin.validator.xmlfile.NewServiceWizard"
+            name="Simplity Service"/>
+        <wizard
+			category="simplity"
+            class="org.simplity.eclipse.plugin.validator.wizard.NewRecordXmlWizard"
+            descriptionImage="icons/wizards/newfile_wiz.gif"
+            icon="icons/objects/x.gif"
+            id="org.simplity.eclipse.plugin.validator.xmlfile.NewRecordWizard"
+            name="Simplity Record"/>
+	</extension>
 </plugin>
