@@ -1,11 +1,19 @@
 package org.simplity.eclipse.plugin.validator.builder;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.eclipse.core.commands.*;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -81,9 +89,12 @@ public class AddRemoveSampleNatureHandler extends AbstractHandler {
 		project.setDescription(description, null);
 		addComponentFolderTemplate(project);
 		addApplicationXml(project);
-		
+		updateMavenDependency(project);
 	}
 
+	/*
+	 * Add Simplity comp folder structure to the project
+	 */
 	private void addComponentFolderTemplate(IProject project) throws CoreException {
 		String[] folders = {"src", "src/main", "src/main/resources", "src/main/resources/comp", "src/main/resources/comp/msg", 
 				"src/main/resources/comp/rec", "src/main/resources/comp/service", "src/main/resources/comp/service/tp"};
@@ -95,11 +106,16 @@ public class AddRemoveSampleNatureHandler extends AbstractHandler {
 		}
 	}
 	
+	/*
+	 * Add Simplity application.xml file to the comp folder
+	 */
 	private void addApplicationXml(IProject project) {
 		try {
 			IFile file = project.getFile("src/main/resources/comp/application.xml");
-			file.create(null, true, null);
+			if(!file.exists())
+				file.create(null, true, null);
 			if (file.exists()) {
+				file.refreshLocal(IResource.DEPTH_ZERO, null);
 				Application application = new Application();
 				Map<String, Field> applicationFields = ReflectUtil.getAllFields(application);
 				String projectName = file.getProject().getName();
@@ -112,6 +128,38 @@ public class AddRemoveSampleNatureHandler extends AbstractHandler {
 			}
 		} catch (CoreException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * Add Simplity kernel dependency to the project
+	 */
+	private void updateMavenDependency(IProject project) {
+		try {
+			MavenXpp3Reader mavenReader = new MavenXpp3Reader();
+			IFile pomIFile = project.getFile("pom.xml");
+			pomIFile.refreshLocal(IResource.DEPTH_ZERO, null);
+			File pomFile = pomIFile.getLocation().toFile();
+	        Model model = mavenReader.read(new FileReader(pomFile));
+	        List<Dependency> dependencies = model.getDependencies();
+	        boolean kernelDependencyExist = false;
+	        for(Dependency dependency : dependencies) {
+	        	if(dependency.getGroupId().equals("org.simplity") && dependency.getArtifactId().equals("kernel")) {
+	        		kernelDependencyExist = true;
+	        	}
+	        }
+	        if(!kernelDependencyExist) {
+	        	Dependency dependency = new Dependency();
+	        	dependency.setGroupId("org.simplity");
+	        	dependency.setArtifactId("kernel");
+	        	dependency.setVersion("1.2.1");
+	        	model.addDependency(dependency);
+	        	MavenXpp3Writer mavenWriter = new MavenXpp3Writer();
+		        mavenWriter.write(new FileWriter(pomFile), model);
+		        pomIFile.refreshLocal(IResource.DEPTH_ZERO, null);
+	        }
+		} catch(Exception ex) {
+		     ex.printStackTrace();
 		}
 	}
 }
