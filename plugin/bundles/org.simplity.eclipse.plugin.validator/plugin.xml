@@ -1,117 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-
-   <extension
-         id="sampleBuilder"
-         name="Sample Project Builder"
-         point="org.eclipse.core.resources.builders">
-      <builder
-            hasNature="true">
-         <run
-               class="org.simplity.eclipse.plugin.validator.builder.SampleBuilder">
-         </run>
-      </builder>
-   </extension>
-   <extension
-         id="sampleNature"
-         name="Sample Project Nature"
-         point="org.eclipse.core.resources.natures">
-      <runtime>
-         <run
-               class="org.simplity.eclipse.plugin.validator.builder.SampleNature">
-         </run>
-      </runtime>
-      <builder
-            id="org.simplity.eclipse.plugin.validator.sampleBuilder">
-      </builder>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commands">
-      <category
-            name="Sample Project Nature commands"
+	<extension
+		id="sampleBuilder"
+		name="Sample Project Builder"
+		point="org.eclipse.core.resources.builders">
+		<builder hasNature="true">
+			<run class="org.simplity.eclipse.plugin.validator.builder.SampleBuilder">
+			</run>
+		</builder>
+	</extension>
+	<extension
+		id="sampleNature"
+		name="Add Simplity Nature"
+		point="org.eclipse.core.resources.natures">
+		<runtime>
+			<run class="org.simplity.eclipse.plugin.validator.builder.SampleNature">
+			</run>
+		</runtime>
+		<builder id="org.simplity.eclipse.plugin.validator.sampleBuilder">
+		</builder>
+	</extension>
+	<extension point="org.eclipse.ui.commands">
+		<category
+			name="Simplity Project Nature commands"
             id="org.simplity.eclipse.plugin.validator.sampleNature.category">
-      </category>
-      <command
-            name="Add/RemoveSample Project Nature"
+		</category>
+		<command
+			name="Add/Remove Simplity Project Nature"
             defaultHandler="org.simplity.eclipse.plugin.validator.builder.AddRemoveSampleNatureHandler"
             categoryId="org.simplity.eclipse.plugin.validator.sampleNature.category"
             id="org.simplity.eclipse.plugin.validator.addRemoveSampleNature">
-      </command>
-   </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            locationURI="popup:org.eclipse.ui.projectConfigure?after=additions">
-         <command
-               commandId="org.simplity.eclipse.plugin.validator.addRemoveSampleNature"
-               label="Disable Sample builder"
-               style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="selection">
-                  <count
-                        value="1">
-                  </count>
-                  <iterate>
-                     <adapt
-                           type="org.eclipse.core.resources.IProject">
-                        <test
-                              value="org.simplity.eclipse.plugin.validator.sampleNature"
-                              property="org.eclipse.core.resources.projectNature">
-                        </test>
-                     </adapt>
-                  </iterate>
-               </with>
-            </visibleWhen>
-         </command>
-         <command
-               commandId="org.simplity.eclipse.plugin.validator.addRemoveSampleNature"
-               label="Enable Sample builder"
-               style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="selection">
-                  <count
-                        value="1">
-                  </count>
-                  <iterate>
-                     <adapt
-                           type="org.eclipse.core.resources.IProject">
-                        <not>
-                           <test
-                                 value="org.simplity.eclipse.plugin.validator.sampleNature"
-                                 property="org.eclipse.core.resources.projectNature">
-                           </test>
-                        </not>
-                     </adapt>
-                  </iterate>
-               </with>
-            </visibleWhen>
-         </command>
-      </menuContribution>
-   </extension>
-   <extension
-         id="xmlProblem"
-         name="XML Problem"
-         point="org.eclipse.core.resources.markers">
-      <super
-            type="org.eclipse.core.resources.problemmarker">
-      </super>
-      <persistent
-            value="true">
-      </persistent>
-   </extension>
+		</command>
+	</extension>
+	<extension
+    	point="org.eclipse.ui.menus">
+    	<menuContribution
+    		locationURI="popup:org.eclipse.ui.projectConfigure?after=additions">
+    		<command 
+    			commandId="org.simplity.eclipse.plugin.validator.addRemoveSampleNature"
+    			label="Disable Simplity builder"
+    			style="push">
+    			<visibleWhen checkEnabled="false">
+	    			<with variable="selection">
+	    				<count value="1">
+	    				</count>
+	    				<iterate>
+	    					<adapt type="org.eclipse.core.resources.IProject">
+	    						<test value="org.simplity.eclipse.plugin.validator.sampleNature"
+	    							property="org.eclipse.core.resources.projectNature">
+	    						</test>
+	    					</adapt>
+	    				</iterate>
+	    			</with>
+	    		</visibleWhen>
+	    	</command>
+	    	
+	    	<command
+	    		commandId="org.simplity.eclipse.plugin.validator.addRemoveSampleNature"
+	    		label="Enable Simplity builder"
+	    		style="push">
+	    		<visibleWhen checkEnabled="false">
+	    			<with variable="selection">
+		    			<count value="1">
+		    			</count>
+		    			<iterate>
+		    				<adapt type="org.eclipse.core.resources.IProject">
+		    					<not>
+		    						<test value="org.simplity.eclipse.plugin.validator.sampleNature"
+		    							property="org.eclipse.core.resources.projectNature">
+		    						</test>
+		    					</not>
+		    				</adapt>
+		    			</iterate>
+		    		</with>
+		    	</visibleWhen>
+		    </command>
+		</menuContribution>
+	</extension>
+	<extension
+		id="xmlProblem"
+		name="XML Problem"
+		point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.core.resources.problemmarker">
+		</super>
+		<persistent value="true">
+		</persistent>
+	</extension>
 
-  <extension point = "org.eclipse.wst.xml.core.catalogContributions">
-        <catalogContribution id="default">
-            <public publicId="http://www.simplity.org/schema"
-                    uri="xsd/kernel.xsd" 
-                    webURL="http://www.simplity.org/schema" />              
-      </catalogContribution>
-    </extension> 
+	<extension point = "org.eclipse.wst.xml.core.catalogContributions">
+		<catalogContribution id="default">
+			<public publicId="http://www.simplity.org/schema"
+				uri="xsd/kernel.xsd"
+				webURL="http://www.simplity.org/schema" />
+		</catalogContribution>
+	</extension> 
 
 	<extension
     	point="org.eclipse.ui.newWizards">
@@ -139,5 +122,23 @@
             icon="icons/objects/x.gif"
             id="org.simplity.eclipse.plugin.validator.xmlfile.NewRecordWizard"
             name="Simplity Record"/>
+	</extension>
+	
+	<extension
+		point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
+		<hyperlinkDetector
+			id="org.simplity.eclipse.plugin.validator.hyperlink.DetectHyperlinks"
+			targetId="org.eclipse.jdt.ui.javaCode"
+			class="org.simplity.eclipse.plugin.validator.hyperlink.DetectHyperlinks"
+			name="%detectRecord">
+		</hyperlinkDetector>
+	</extension>
+	<extension
+		point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectorTargets">
+		<target
+			id="org.eclipse.jdt.ui.javaCode"
+			name="Java Editor">
+			<context type="org.eclipse.ui.texteditor.ITextEditor"/>
+		</target>
 	</extension>
 </plugin>
