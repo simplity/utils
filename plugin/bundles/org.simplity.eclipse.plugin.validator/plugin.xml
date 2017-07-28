@@ -141,4 +141,94 @@
 			<context type="org.eclipse.ui.texteditor.ITextEditor"/>
 		</target>
 	</extension>
+	
+	<extension point="org.eclipse.ui.views">
+		<category
+			name="Hello Category"
+			id="org.simplity.eclipse.plugin.validator.view.SimplityProblemView">
+		</category>
+		<view
+			name="Simplity Problems"
+			icon="icons/sample.gif"
+			category="org.simplity.eclipse.plugin.validator.view"
+			class="org.simplity.eclipse.plugin.validator.view.SimplityProblemView"
+			id="org.simplity.eclipse.plugin.validator.view.SimplityProblemView">
+		</view>
+	</extension>
+	
+	<extension point="org.eclipse.core.resources.markers"
+		id="org.simplity.eclipse.plugin.validator.marker"
+		name="Simplity Marker">
+		<super type="org.eclipse.core.resources.textmarker"/>
+		<super type="org.eclipse.core.resources.marker"/>
+		<persistent value="true"/>
+	</extension>
+	
+	<extension point="org.eclipse.ui.popupMenus"> 
+		<viewerContribution 
+		  	id="org.eclipse.ui.articles.action.contribution.popup.navigator"
+			targetID="#CompilationUnitEditorContext"> 
+			<action
+			    class="org.simplity.eclipse.plugin.validator.marker.SimplityMarkerAction"
+			    id="org.simplity.eclipse.plugin.validator.marker.simplitymarkeraction"
+			    label="Create Simplity Marker"
+			    menubarPath="additions">
+			</action>
+			<action
+			    class="org.simplity.eclipse.plugin.validator.marker.SimplityFileMarkerCount"
+			    id="org.simplity.eclipse.plugin.validator.marker.simplityfilemarkercount"
+			    label="Count Markers"
+			    menubarPath="additions">
+			</action>
+		</viewerContribution>
+	</extension>
+	
+	<extension point="org.eclipse.ui.popupMenus">
+		<objectContribution id="Clarity.objectContribution2"
+			objectClass="org.eclipse.jdt.core.IOpenable">
+			<action
+			   label="Count Simplity Markers"
+			   class="org.simplity.eclipse.plugin.validator.marker.simplityfilesmarkercount"
+			   menubarPath="additions"
+			   id="org.simplity.eclipse.plugin.validator.marker.simplityfilesmarkercount">
+			</action>
+		</objectContribution>
+	</extension>
+	
+	<extension point="org.eclipse.ui.editors.markerAnnotationSpecification"
+		id="simplity annotation"
+		name="SimplityAnnotation">
+		<specification
+			annotationType="org.simplity.eclipse.plugin.validator.marker.simplityannotation"
+			label="SimplityAnnotation"
+			icon="icons/sample.gif"
+			overviewRulerPreferenceKey="clruler"
+			overviewRulerPreferenceValue="true"
+			colorPreferenceKey="clcolor"
+			colorPreferenceValue="255,255,0"
+			textPreferenceKey="cltext"
+			textPreferenceValue="true"
+			verticalRulerPreferenceKey="clvertical"
+			verticalRulerPreferenceValue="true"
+			textStylePreferenceKey="clstyle"
+			textStylePreferenceValue="BOX">
+		</specification>
+	</extension>
+	
+	<extension point="org.eclipse.ui.editors.annotationTypes">
+		<type
+			markerSeverity="0"
+			super="org.eclipse.ui.workbench.texteditor.info"
+			name="org.simplity.eclipse.plugin.validator.marker.simplityannotation"
+			markerType="org.simplity.eclipse.plugin.validator.simplitymarkers.simplitymarker"/>
+	</extension>
+	
+	<extension point="org.eclipse.ui.editors.markerUpdaters">
+		<updater
+			id="org.simplity.eclipse.plugin.validator.marker.SimplityMarkerUpdater"
+			class="org.simplity.eclipse.plugin.validator.marker.SimplityMarkerUpdater"
+			markerType="org.simplity.eclipse.plugin.validator.simplitymarkers.simplitymarker">
+		</updater>
+	</extension>
+
 </plugin>
