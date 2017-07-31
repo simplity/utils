@@ -231,4 +231,37 @@
 		</updater>
 	</extension>
 
+	<extension
+		point="org.eclipse.core.contenttype.contentTypes">
+	    <content-type
+	    	base-type="org.eclipse.core.runtime.xml"
+	        file-extensions="xml"
+	        id="simplity.xml"
+	        name="Simplity Validation"
+	        priority="normal">
+		</content-type>
+	</extension>
+	
+	<extension
+		id="SimplityValidation"
+	    name="Simplity Validation"
+	    point="org.eclipse.wst.validation.validatorV2">
+	    <validator
+	    	version="3"
+	    	build="true"
+	    	manual="true"
+	        class="org.simplity.eclipse.plugin.validator.marker.SimplityValidator"
+	        sourceid="org.eclipse.wst.xml.ui.internal.validation.DelegatingSourceValidatorForXML"
+	        markerId="org.eclipse.wst.xml.core.validationMarker">
+	        <include>
+	        	<rules>
+	            	<contentType
+	                	exactMatch="true"
+	                    id="simplity.xml">
+					</contentType>
+				</rules>
+			</include>
+		</validator>
+	</extension>
+
 </plugin>
