@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
  * @author simplity.org
  *
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class CompsManager {
 	private static final Logger logger = LoggerFactory.getLogger(CompsManager.class);
 	private static final String EXTN = ".xml";
@@ -73,7 +74,7 @@ public class CompsManager {
 			return null;
 		}
 
-		Comp comp = instance.comps[compType.getIdx()].get(compId);
+		Comp comp = (Comp)instance.comps[compType.getIdx()].get(compId);
 		if (comp != null) {
 			return comp;
 		}
@@ -117,7 +118,7 @@ public class CompsManager {
 		if (compType == null) {
 			return instance.apps.get(compId);
 		}
-		return instance.comps[compType.getIdx()].get(compId);
+		return (Comp)instance.comps[compType.getIdx()].get(compId);
 	}
 
 	/**
@@ -133,7 +134,7 @@ public class CompsManager {
 	/**
 	 * we keep all comps in an array, using the index provided by componentType
 	 */
-	private Map<String, Comp>[] comps;
+	private Map[] comps;
 
 	/**
 	 * keep track of all compilation units
@@ -157,7 +158,6 @@ public class CompsManager {
 	 * @param compFolderName
 	 *            that ends with
 	 */
-	@SuppressWarnings("unchecked")
 	public void loadAll(String compFolderName) {
 		String rootFolder = compFolderName;
 		if (rootFolder.endsWith(FOLDER) == false) {
@@ -181,13 +181,9 @@ public class CompsManager {
 		 * references for comp before the comp is parsed
 		 */
 		int nbr = ComponentType.values().length;
-		/*
-		 * type safety requires us to do this unchecked assignment :-) :-)
-		 */
-		Object[] objs = new Object[nbr];
-		this.comps = (Map<String, Comp>[]) objs;
+		this.comps = new Map[nbr];
 		for (int i = 0; i < this.comps.length; i++) {
-			this.comps[i] = new HashMap<String, Comp>();
+			this.comps[i] = new HashMap();
 		}
 
 		this.apps = new HashMap<String, Comp>();
@@ -218,7 +214,7 @@ public class CompsManager {
 		Class<?> cls = ct.getClass();
 		String packageName = cls.getPackage().getName();
 		String prefix = ct.getFolderPrefix();
-		Map<String, Comp> map = this.comps[ct.getIdx()];
+		Map map = this.comps[ct.getIdx()];
 		/**
 		 * holds comps within a compiltionUnit
 		 */
@@ -283,7 +279,7 @@ public class CompsManager {
 		Class<?> cls = ct.getClass();
 		String prefix = ct.getFolderPrefix();
 		String elementName = TextUtil.classNameToName(cls.getSimpleName());
-		Map<String, Comp> map = this.comps[ct.getIdx()];
+		Map map = this.comps[ct.getIdx()];
 
 		String compFolder = rootFolder + prefix;
 		for (String fn : FileManager.getResources(compFolder)) {
@@ -383,7 +379,7 @@ public class CompsManager {
 
 		CompilationUnit cpu = new CompilationUnit(fileId, ct, true);
 		CompilationUnit oldCpu = this.compilationUnits.put(fileId, cpu);
-		Map<String, Comp> map = ct == null ? this.apps : this.comps[ct.getIdx()];
+		Map map = ct == null ? this.apps : this.comps[ct.getIdx()];
 		this.removeComps(map, oldCpu);
 
 		if (ct == null) {
@@ -408,7 +404,7 @@ public class CompsManager {
 		}
 
 		ValidationCtx vtx = new ValidationCtx();
-		Map<String, Comp> map = this.comps[ct.getIdx()];
+		Map map = this.comps[ct.getIdx()];
 		for (Map.Entry<String, Component> entry : objects.entrySet()) {
 			String key = entry.getKey();
 			Comp comp = this.createComp(ct, key, entry.getValue(), cpu, vtx);
@@ -538,5 +534,4 @@ public class CompsManager {
 		}
 		return true;
 	}
-
 }
