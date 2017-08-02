@@ -276,7 +276,7 @@ public class CompsManager {
 	 * @param vtx
 	 */
 	private void loadSingles(ComponentType ct, String rootFolder, ValidationCtx vtx) {
-		Class<?> cls = ct.getClass();
+		Class<?> cls = ct.getComponentClass();
 		String prefix = ct.getFolderPrefix();
 		String elementName = TextUtil.classNameToName(cls.getSimpleName());
 		Map map = this.comps[ct.getIdx()];
