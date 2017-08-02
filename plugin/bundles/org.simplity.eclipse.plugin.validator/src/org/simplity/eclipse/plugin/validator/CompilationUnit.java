@@ -99,6 +99,9 @@ public class CompilationUnit {
 	 * @param warning
 	 */
 	public void addWarning(String warning) {
+		if(this.warnings == null){
+			this.warnings = new ArrayList<String>();
+		}
 		this.warnings.add(warning);
 	}
 
