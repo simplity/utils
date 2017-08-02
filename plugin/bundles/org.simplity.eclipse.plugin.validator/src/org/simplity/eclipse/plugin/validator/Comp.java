@@ -77,9 +77,12 @@ public class Comp {
 	 * @param dependents
 	 *            Any reference accumulated before this is actually read
 	 * @param vtx
+	 * @param beingValidated
+	 *            if true, errors are flashed for missing references. if false,
+	 *            objective is to build references, before validating
 	 */
 	public Comp(ComponentType componentType, String compId, Object underlyingObject, CompilationUnit cu,
-			Set<Comp> dependents, ValidationCtx vtx) {
+			Set<Comp> dependents, ValidationCtx vtx, boolean beingValidated) {
 		this.componentType = componentType;
 		this.compId = compId;
 		this.compilationUnit = cu;
@@ -88,7 +91,7 @@ public class Comp {
 		/*
 		 * validate this object
 		 */
-		vtx.beginComp(this);
+		vtx.beginComp(this, beingValidated);
 		this.compExists = true;
 		if (underlyingObject instanceof Component) {
 			((Component) underlyingObject).validate(vtx);
@@ -104,7 +107,7 @@ public class Comp {
 
 	/**
 	 * construct a comp for reference before it is parsed. This is temp, and
-	 * will be replaced, if found with the parsed on later
+	 * will be replaced, if found with the parsed one later
 	 *
 	 * @param componentType
 	 * @param compId
@@ -144,12 +147,19 @@ public class Comp {
 	 *
 	 * @param refType
 	 * @param refName
+	 * @param duringValidation
+	 *            if true, an error message is added if the component does not
+	 *            exist. Repeat errors are avoided for a comp
 	 */
-	public void addReferredComp(ComponentType refType, String refName) {
-		if(this.compsUsed == null){
+	public void addReferredComp(ComponentType refType, String refName, boolean duringValidation) {
+		if (this.compsUsed == null) {
 			this.compsUsed = new HashSet<Comp>();
 		}
-		this.compsUsed.add(CompsManager.getRefComp(refType, refName));
+		Comp comp = CompsManager.getRefComp(refType, refName);
+		boolean added = this.compsUsed.add(comp);
+		if (duringValidation && added && comp.compExists == false) {
+			this.addError("Resource of type " + refType + " with name " + refName + " does not exist");
+		}
 	}
 
 	/**

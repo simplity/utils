@@ -84,6 +84,74 @@ public class CompilationUnit {
 		this.fileName = fileName;
 		this.componentType = componentType;
 		this.hasMultipleComps = hasMultiple;
+	}
+
+
+	/**
+	 * @param comp
+	 */
+	public void addComp(Comp comp) {
+		this.comps.add(comp);
+	}
+
+	/**
+	 * @param warning
+	 */
+	public void addWarning(String warning) {
+		if(this.warnings == null){
+			this.warnings = new ArrayList<String>();
+		}
+		this.warnings.add(warning);
+	}
+
+
+	/**
+	 * @param error
+	 */
+	public void addError(String error) {
+		if(this.errors == null){
+			this.errors = new ArrayList<String>();
+		}
+		this.errors.add(error);
+	}
+
+	/**
+	 * @return collection of errors. Never null, could be empty
+	 */
+	public Collection<String> getErrors(){
+		return this.errors;
+	}
+
+	/**
+	 * @return collection of errors. Never null, could be empty
+	 */
+	public Collection<String> getWarnings(){
+		return this.warnings;
+	}
+	List<String> errors;
+
+	/**
+	 * list of all warnings in this file. this is to be replaced with eclipse
+	 * related object.
+	 * TODO: how do we link this to eclipse so that we can remove them when this
+	 * is fixed
+	 */
+	List<String> warnings;
+
+	/**
+	 * content of this file
+	 */
+	Set<Comp> comps = new HashSet<Comp>();
+
+	/**
+	 * @param fileName
+	 * @param componentType
+	 * @param hasMultiple
+	 */
+	public CompilationUnit(String fileName, ComponentType componentType, boolean hasMultiple) {
+		this.fileName = fileName;
+		this.componentType = componentType;
+		this.hasMultipleComps = hasMultiple;
 		this.errors = new ArrayList<String>();
 	}
 

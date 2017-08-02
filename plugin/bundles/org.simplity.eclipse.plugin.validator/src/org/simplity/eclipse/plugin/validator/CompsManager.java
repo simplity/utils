@@ -177,11 +177,11 @@ public class CompsManager {
 	 * this is to be called to load all existing resources, before doing any
 	 * incremental operations
 	 *
-	 * @param compFolderName
+	 * @param rootOfComp
 	 *            that ends with
 	 */
-	public void loadAll(String compFolderName) {
-		String rootFolder = compFolderName;
+	public void loadAll(String rootOfComp) {
+		String rootFolder = rootOfComp;
 		if (rootFolder.endsWith(FOLDER) == false) {
 			rootFolder += FOLDER;
 		}
@@ -216,6 +216,7 @@ public class CompsManager {
 		this.loadApp(rootFolder, vtx);
 
 		for (ComponentType ct : ComponentType.values()) {
+			String compFolderName = this.compRootFolder + ct.getFolderPrefix();
 			if (ct.isGrouped()) {
 				this.loadGroups(ct, compFolderName, vtx);
 			} else {
@@ -229,38 +230,39 @@ public class CompsManager {
 	 * collection/group
 	 *
 	 * @param ct
-	 * @param rootFolder
+	 * @param compFolder
 	 * @param vtx
 	 */
-	private void loadGroups(ComponentType ct, String rootFolder, ValidationCtx vtx) {
+	private void loadGroups(ComponentType ct, String compFolder, ValidationCtx vtx) {
 		Class<?> cls = ct.getComponentClass();
-		String packageName = cls.getPackage().getName();
-		String prefix = ct.getFolderPrefix();
+		String packageName = cls.getPackage().getName() + '.';
 		Map map = this.comps[ct.getIdx()];
 		/**
 		 * holds comps within a compiltionUnit
 		 */
 		Map<String, Component> temp = new HashMap<String, Component>();
 
-		String compFolder = rootFolder + prefix;
 		/**
 		 * for each resource file in the comp-root folder
 		 */
+		logger.info("looking inside folder " + compFolder + " for resources");
+		int rootLength = this.compRootFolder.length();
 		for (String fn : FileManager.getResources(compFolder)) {
-			String id = prefix + fn;
+			logger.info("found a resource file : " + fn + " for resource type " +ct);
+			String id = fn.substring(rootLength);
 			CompilationUnit cpu = new CompilationUnit(id, ct, true);
 			this.compilationUnits.put(id, cpu);
 			temp.clear();
 
-			if (XmlUtil.xmlToCollection(compFolder + fn, temp, packageName) == false) {
-				logger.info("File " + fn
+			if (XmlUtil.xmlToCollection(fn, temp, packageName) == false) {
+				logger.info("File " + id
 						+ " is not parsed because of errors in it or it is meant for different type of resource.");
 				continue;
 			}
 
 			for (Map.Entry<String, Component> entry : temp.entrySet()) {
 				String key = entry.getKey();
-				map.put(key, this.createComp(ct, key, entry.getValue(), cpu, vtx));
+				map.put(key, this.createComp(ct, key, entry.getValue(), cpu, vtx, false));
 			}
 
 			logger.info("File " + fn + " parsed for resource type " + ct);
@@ -273,9 +275,10 @@ public class CompsManager {
 	 * @param value
 	 * @param cpu
 	 * @param vtx
+	 * @param beingValidated
 	 * @return
 	 */
-	private Comp createComp(ComponentType ct, String key, Object value, CompilationUnit cpu, ValidationCtx vtx) {
+	private Comp createComp(ComponentType ct, String key, Object value, CompilationUnit cpu, ValidationCtx vtx, boolean beingValidated) {
 		/*
 		 * if this was referred earlier, it would have been created as dummy
 		 */
@@ -285,7 +288,7 @@ public class CompsManager {
 			dependents = comp.getDependentComps();
 		}
 
-		comp = new Comp(ct, key, value, cpu, dependents, vtx);
+		comp = new Comp(ct, key, value, cpu, dependents, vtx, beingValidated);
 		cpu.addComp(comp);
 		return comp;
 	}
@@ -294,34 +297,43 @@ public class CompsManager {
 	 * load components from files that have one component per file
 	 *
 	 * @param ct
-	 * @param rootFolder
+	 * @param compFolder
 	 * @param vtx
 	 */
-	private void loadSingles(ComponentType ct, String rootFolder, ValidationCtx vtx) {
+	private void loadSingles(ComponentType ct, String compFolder, ValidationCtx vtx) {
 		Class<?> cls = ct.getComponentClass();
-		String prefix = ct.getFolderPrefix();
 		String elementName = TextUtil.classNameToName(cls.getSimpleName());
 		Map map = this.comps[ct.getIdx()];
-
-		String compFolder = rootFolder + prefix;
+		int rootLength = this.compRootFolder.length();
+		int compLength = compFolder.length();
 		for (String fn : FileManager.getResources(compFolder)) {
-			String id = prefix + fn;
+			String id = fn.substring(rootLength);
 			CompilationUnit cpu = new CompilationUnit(id, ct, false);
 			this.compilationUnits.put(id, cpu);
 			try {
 				Component obj = (Component) cls.newInstance();
-				if (XmlUtil.xmlToObject(compFolder + fn, obj, elementName) == false) {
+				/*
+				 * issue with Jobs/batch. we have not stuck to our naming standard!!
+				 */
+				if(ct == ComponentType.JOBS){
+					elementName = "batch";
+				}
+				if (XmlUtil.xmlToObject(fn, obj, elementName) == false) {
 					logger.info(
-							"File " + fn + " in the root comp folder is not parsed as it is not an application file.");
+							"File " + fn + " is not loaded, probably because its root element is not " + elementName);
 					continue;
 				}
 				String fullName = obj.getQualifiedName();
-				if (fn.equals(fullName + EXTN) == false) {
-					logger.error("file " + fn + " contins a resource with its qualified name as " + fullName
-							+ ". this violates naming rule that is required to manage the rresources at run time. Resource not parsed.");
+				/*
+				 * expected name is the name without .xml with . as separators
+				 */
+				String expectedName = fn.substring(compLength, fn.length()-EXTN.length()).replace('/', '.');
+				if (fullName.equals(expectedName) == false) {
+					logger.error("file " + fn + " contains a resource with its qualified name as " + fullName
+							+ " but as per naming convention, we expect it to be " + expectedName);
 					continue;
 				}
-				Comp comp = this.createComp(ct, fullName, obj, cpu, vtx);
+				Comp comp = this.createComp(ct, fullName, obj, cpu, vtx, false);
 				map.put(fullName, comp);
 				logger.info("File " + fn + " parsed as resource " + ct);
 			} catch (XmlParseException e) {
@@ -359,7 +371,7 @@ public class CompsManager {
 				logger.info("File " + fn + " has xml syntax errors.");
 				continue;
 			}
-			Comp comp = this.createComp(null, id, app, cpu, vtx);
+			Comp comp = this.createComp(null, id, app, cpu, vtx, false);
 			this.apps.put(id, comp);
 		}
 	}
@@ -427,7 +439,7 @@ public class CompsManager {
 		Map map = this.comps[ct.getIdx()];
 		for (Map.Entry<String, Component> entry : objects.entrySet()) {
 			String key = entry.getKey();
-			Comp comp = this.createComp(ct, key, entry.getValue(), cpu, vtx);
+			Comp comp = this.createComp(ct, key, entry.getValue(), cpu, vtx, true);
 			cpu.addComp(comp);
 			map.put(key, comp);
 		}
@@ -449,7 +461,7 @@ public class CompsManager {
 					cpu.addError("resource full name should match folder/file name.");
 					return;
 				}
-				Comp comp = this.createComp(ct, compName, object, cpu, new ValidationCtx());
+				Comp comp = this.createComp(ct, compName, object, cpu, new ValidationCtx(), true);
 				cpu.addComp(comp);
 				this.comps[ct.getIdx()].put(compName, comp);
 				return;
@@ -476,7 +488,7 @@ public class CompsManager {
 			/// remove folder names
 			appId = appId.substring(appId.lastIndexOf('/') + 1);
 			if (XmlUtil.xmlToObject(fileName, app, "application")) {
-				Comp comp = this.createComp(null, appId, app, cpu, new ValidationCtx());
+				Comp comp = this.createComp(null, appId, app, cpu, new ValidationCtx(), true);
 				cpu.addComp(comp);
 				this.apps.put(appId, comp);
 				return;

@@ -42,6 +42,8 @@ public class ValidationCtx extends ValidationContext {
 	 */
 	private Comp compBeingValidated;
 
+	private boolean beingLoaded;
+
 	/**
 	 *
 	 */
@@ -54,13 +56,17 @@ public class ValidationCtx extends ValidationContext {
 	 * and no at run time.
 	 *
 	 * @param comp
+	 * @param forLoading
+	 *            true if this is for loading, and not for validation. if true,
+	 *            error/warnings are ignored.
 	 */
-	public void beginComp(Comp comp) {
+	public void beginComp(Comp comp, boolean forLoading) {
 		if (this.compBeingValidated != null) {
 			logger.error("Error in validation of components. " + comp + " wants to start validating when "
 					+ this.compBeingValidated + " is in the middle of validtion.");
 		} else {
 			this.compBeingValidated = comp;
+			this.beingLoaded = forLoading;
 		}
 	}
 
@@ -80,7 +86,7 @@ public class ValidationCtx extends ValidationContext {
 	public void addError(String error) {
 		if (this.compBeingValidated == null) {
 			logger.error("Error message being added without a call to startValidation(). " + error);
-		} else {
+		} else if(this.beingLoaded == false){
 			this.compBeingValidated.addError(error);
 		}
 	}
@@ -96,7 +102,7 @@ public class ValidationCtx extends ValidationContext {
 	public void reportUnusualSetting(String warning) {
 		if (this.compBeingValidated == null) {
 			logger.error("Warning message being added without a call to startValidation(). " + warning);
-		} else {
+		} else if(this.beingLoaded == false) {
 			this.compBeingValidated.addWarning(warning);
 		}
 	}
@@ -112,7 +118,7 @@ public class ValidationCtx extends ValidationContext {
 		if (this.compBeingValidated == null) {
 			logger.error("referecne being added without a call to startValidation(). ");
 		} else {
-			this.compBeingValidated.addReferredComp(refType, refName);
+			this.compBeingValidated.addReferredComp(refType, refName, this.beingLoaded);
 		}
 
 	}
