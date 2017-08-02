@@ -22,6 +22,7 @@
 
 package org.simplity.eclipse.plugin.validator;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -105,6 +106,9 @@ public class CompilationUnit {
 	 * @param error
 	 */
 	public void addError(String error) {
+		if(this.errors == null){
+			this.errors = new ArrayList<String>();
+		}
 		this.errors.add(error);
 	}
 
