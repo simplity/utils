@@ -211,7 +211,7 @@ public class CompsManager {
 	 * @param vtx
 	 */
 	private void loadGroups(ComponentType ct, String rootFolder, ValidationCtx vtx) {
-		Class<?> cls = ct.getClass();
+		Class<?> cls = ct.getComponentClass();
 		String packageName = cls.getPackage().getName();
 		String prefix = ct.getFolderPrefix();
 		Map map = this.comps[ct.getIdx()];
@@ -380,7 +380,8 @@ public class CompsManager {
 		CompilationUnit cpu = new CompilationUnit(fileId, ct, true);
 		CompilationUnit oldCpu = this.compilationUnits.put(fileId, cpu);
 		Map map = ct == null ? this.apps : this.comps[ct.getIdx()];
-		this.removeComps(map, oldCpu);
+		if(oldCpu != null)
+			this.removeComps(map, oldCpu);
 
 		if (ct == null) {
 			this.validateApp(fileName, cpu);
@@ -398,7 +399,7 @@ public class CompsManager {
 	 */
 	private void validateGroup(ComponentType ct, String fileName, CompilationUnit cpu) {
 		Map<String, Component> objects = new HashMap<String, Component>();
-		if (XmlUtil.xmlToCollection(fileName, objects, ct.getClass().getPackage().getName()) == false) {
+		if (XmlUtil.xmlToCollection(fileName, objects, ct.getComponentClass().getPackage().getName()) == false) {
 			cpu.addError("Not a valid xml, or this is not for resource type " + ct);
 			return;
 		}
@@ -418,7 +419,7 @@ public class CompsManager {
 	 * @param fileName
 	 */
 	private void validateSingle(ComponentType ct, String fileName, CompilationUnit cpu) {
-		Class<?> cls = ct.getClass();
+		Class<?> cls = ct.getComponentClass();
 		try {
 			Object object = cls.newInstance();
 			String eleName = TextUtil.classNameToName(cls.getSimpleName());

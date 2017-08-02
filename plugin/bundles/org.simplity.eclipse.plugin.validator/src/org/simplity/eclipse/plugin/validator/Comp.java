@@ -124,7 +124,12 @@ public class Comp {
 	 * @param refName
 	 */
 	public void addReferredComp(ComponentType refType, String refName) {
+		// this.compsUsed.add(CompsManager.getRefComp(refType, refName));
+		if (this.compsUsed == null) {
+			this.compsUsed = new HashSet<Comp>();
+		}
 		this.compsUsed.add(CompsManager.getRefComp(refType, refName));
+
 	}
 
 	/**

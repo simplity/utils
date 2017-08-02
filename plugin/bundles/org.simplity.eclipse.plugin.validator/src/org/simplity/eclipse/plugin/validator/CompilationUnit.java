@@ -22,6 +22,7 @@
 
 package org.simplity.eclipse.plugin.validator;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -83,6 +84,7 @@ public class CompilationUnit {
 		this.fileName = fileName;
 		this.componentType = componentType;
 		this.hasMultipleComps = hasMultiple;
+		this.errors = new ArrayList<String>();
 	}
 
 
