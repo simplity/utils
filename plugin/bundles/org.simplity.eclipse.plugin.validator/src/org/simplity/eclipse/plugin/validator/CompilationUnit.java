@@ -107,6 +107,9 @@ public class CompilationUnit {
 	 * @param error
 	 */
 	public void addError(String error) {
+		if(this.errors == null){
+			this.errors = new ArrayList<String>();
+		}
 		this.errors.add(error);
 	}
 

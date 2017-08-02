@@ -1,3 +1,25 @@
+/*
+ * Copyright (c) 2017 simplity.org
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package org.simplity.eclipse.plugin.validator;
 
 import java.io.File;
@@ -351,14 +373,12 @@ public class CompsManager {
 		}
 
 		String relName = fileName.substring(this.compRootFolder.length());
-		String prefix;
 		ComponentType ct;
 		if (relName.isEmpty()) {
 			/*
 			 * files in root have to be application
 			 */
 			ct = null;
-			prefix = "";
 
 		} else {
 			ct = ComponentType.getTypeByFolder(relName);
@@ -367,21 +387,20 @@ public class CompsManager {
 						+ " is inside comp folder, but sub-folder is not for any simplity resource. File not validated");
 				return null;
 			}
-			prefix = ct.getFolderPrefix();
 		}
 		/*
 		 * file name is rootName + prefix + resource-name. We have t get
 		 * resource name from this as fileIs. for example fileName =
 		 * "comp/service/tp/mod/s.xml" then fileId would be "mod/s.xml"
 		 */
-		String folderPrefix = this.compRootFolder + prefix;
-		String fileId = fileName.substring(folderPrefix.length());
+		String fileId = fileName.substring(this.compRootFolder.length());
 
 		CompilationUnit cpu = new CompilationUnit(fileId, ct, true);
 		CompilationUnit oldCpu = this.compilationUnits.put(fileId, cpu);
 		Map map = ct == null ? this.apps : this.comps[ct.getIdx()];
-		if(oldCpu != null)
+		if(oldCpu != null){
 			this.removeComps(map, oldCpu);
+		}
 
 		if (ct == null) {
 			this.validateApp(fileName, cpu);
@@ -534,5 +553,23 @@ public class CompsManager {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 *
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		CompsManager.loadResources("c:/repos/simplity/test/WebContent/WEB-INF/comp");
+		CompsManager mgr = instance;
+		logger.info("done with " + mgr.apps.size() + " apps in it");
+		String[] errors = CompsManager.validate("c:/repos/simplity/test/WebContent/WEB-INF/comp/service/tp/junk.xml");
+		if(errors == null){
+			logger.info("NO problem with junk");
+		}else{
+			for(String err :errors){
+				logger.error(err);
+			}
+		}
 	}
 }
