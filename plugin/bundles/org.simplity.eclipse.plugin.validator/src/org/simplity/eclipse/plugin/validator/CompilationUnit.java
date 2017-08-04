@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.simplity.kernel.comp.ComponentType;
+import org.slf4j.LoggerFactory;
 
 /**
  * content of a file that contains a simplity component
@@ -37,7 +38,7 @@ import org.simplity.kernel.comp.ComponentType;
  *
  */
 public class CompilationUnit {
-
+	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CompilationUnit.class);
 	/**
 	 * file name relative to the base. Relevant only when instantiated in the
 	 * context of an editor.
@@ -112,6 +113,7 @@ public class CompilationUnit {
 		if(this.errors == null){
 			this.errors = new ArrayList<String>();
 		}
+		logger.info("error added  = " + error);
 		this.errors.add(error);
 	}
 

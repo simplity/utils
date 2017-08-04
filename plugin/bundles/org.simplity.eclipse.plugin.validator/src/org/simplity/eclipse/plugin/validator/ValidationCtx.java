@@ -42,7 +42,7 @@ public class ValidationCtx extends ValidationContext {
 	 */
 	private Comp compBeingValidated;
 
-	private boolean beingLoaded;
+	private boolean needsValidation;
 
 	/**
 	 *
@@ -56,17 +56,16 @@ public class ValidationCtx extends ValidationContext {
 	 * and no at run time.
 	 *
 	 * @param comp
-	 * @param forLoading
-	 *            true if this is for loading, and not for validation. if true,
-	 *            error/warnings are ignored.
+	 * @param forValidation
+	 *            true if this is for validation, false if it just being loaded.
 	 */
-	public void beginComp(Comp comp, boolean forLoading) {
+	public void beginComp(Comp comp, boolean forValidation) {
 		if (this.compBeingValidated != null) {
 			logger.error("Error in validation of components. " + comp + " wants to start validating when "
 					+ this.compBeingValidated + " is in the middle of validtion.");
 		} else {
 			this.compBeingValidated = comp;
-			this.beingLoaded = forLoading;
+			this.needsValidation = forValidation;
 		}
 	}
 
@@ -84,9 +83,10 @@ public class ValidationCtx extends ValidationContext {
 	 */
 	@Override
 	public void addError(String error) {
+		logger.info("An error is being added = " + error);
 		if (this.compBeingValidated == null) {
 			logger.error("Error message being added without a call to startValidation(). " + error);
-		} else if(this.beingLoaded == false){
+		} else if(this.needsValidation){
 			this.compBeingValidated.addError(error);
 		}
 	}
@@ -102,7 +102,7 @@ public class ValidationCtx extends ValidationContext {
 	public void reportUnusualSetting(String warning) {
 		if (this.compBeingValidated == null) {
 			logger.error("Warning message being added without a call to startValidation(). " + warning);
-		} else if(this.beingLoaded == false) {
+		} else if(this.needsValidation) {
 			this.compBeingValidated.addWarning(warning);
 		}
 	}
@@ -118,9 +118,8 @@ public class ValidationCtx extends ValidationContext {
 		if (this.compBeingValidated == null) {
 			logger.error("referecne being added without a call to startValidation(). ");
 		} else {
-			this.compBeingValidated.addReferredComp(refType, refName, this.beingLoaded);
+			this.compBeingValidated.addReferredComp(refType, refName, this.needsValidation);
 		}
-
 	}
 
 	/**

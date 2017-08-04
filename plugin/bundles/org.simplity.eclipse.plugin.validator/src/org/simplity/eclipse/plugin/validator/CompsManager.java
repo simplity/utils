@@ -101,7 +101,7 @@ public class CompsManager {
 			return comp;
 		}
 		/*
-		 * create a dummy one and keep it in undefined collection, if it not
+		 * create a dummy one and keep it in undefined collection, if it is not
 		 * already there
 		 */
 		String id = compType + compId;

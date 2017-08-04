@@ -42,7 +42,7 @@ public class Comp {
 	 */
 	final ComponentType componentType;
 	/**
-	 * unique id. compType + compId woudl be unique
+	 * unique id. compType + compId would be unique
 	 */
 	final String compId;
 	/**
