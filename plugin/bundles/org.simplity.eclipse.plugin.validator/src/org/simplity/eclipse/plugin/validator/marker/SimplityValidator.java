@@ -1,5 +1,16 @@
 package org.simplity.eclipse.plugin.validator.marker;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Stack;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -8,6 +19,13 @@ import org.eclipse.wst.validation.ValidationResult;
 import org.eclipse.wst.validation.ValidationState;
 import org.eclipse.wst.validation.ValidatorMessage;
 import org.simplity.eclipse.plugin.validator.CompsManager;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.xml.sax.Attributes;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 public class SimplityValidator extends AbstractValidator {
 
@@ -16,22 +34,97 @@ public class SimplityValidator extends AbstractValidator {
 	}
 
 	@Override
-	public ValidationResult validate(IResource resource, int kind, ValidationState validationState, IProgressMonitor progressMonitor) {
+	public ValidationResult validate(IResource resource, int kind, ValidationState validationState,
+			IProgressMonitor progressMonitor) {
 		String compRoot = resource.getProject().findMember("src/main/resources/comp").getLocation().toString();
 		CompsManager.loadResources(compRoot);
+
+		Document doc = null;
+		try {
+			doc = readXML(((IFile) resource).getContents(),"lineNum");			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		ValidationResult validationResult = new ValidationResult();
-		
+
 		String fileName = resource.getLocation().toString();
 		String[] errors = CompsManager.validate(fileName);
-		for(String error : errors) {
+		for (String error : errors) { 
+			//Extract the element from the doc where the error is found, and use the lineNum attribute to extract the line number
+			//((Element)(doc.getElementsByTagName("setValue").item(0))).getAttribute("lineNum");
 			ValidatorMessage validatorMessage = ValidatorMessage.create(error, resource);
 			validatorMessage.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
 			validatorMessage.setAttribute(IMarker.LINE_NUMBER, 2);
 			validationResult.add(validatorMessage);
 		}
-		
+
 		return validationResult;
 	}
+	
+	public static Document readXML(InputStream is, final String lineNumAttribName) throws IOException, SAXException {
+	    final Document doc;
+	    SAXParser parser;
+	    try {
+	        SAXParserFactory factory = SAXParserFactory.newInstance();
+	        parser = factory.newSAXParser();
+	        DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+	        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+	        doc = docBuilder.newDocument();           
+	    } catch(ParserConfigurationException e){
+	        throw new RuntimeException("Can't create SAX parser / DOM builder.", e);
+	    }
+	 
+	    final Stack<Element> elementStack = new Stack<Element>();
+	    final StringBuilder textBuffer = new StringBuilder();
+	    DefaultHandler handler = new DefaultHandler() {
+	        private Locator locator;
+	 
+	        @Override
+	        public void setDocumentLocator(Locator locator) {
+	            this.locator = locator; //Save the locator, so that it can be used later for line tracking when traversing nodes.
+	        }
+	        
+	        @Override
+	        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {               
+	            addTextIfNeeded();
+	            Element el = doc.createElement(qName);
+	            for(int i = 0;i < attributes.getLength(); i++)
+	                el.setAttribute(attributes.getQName(i), attributes.getValue(i));
+	            el.setAttribute(lineNumAttribName, String.valueOf(locator.getLineNumber()));
+	            elementStack.push(el);               
+	        }
+	        
+	        @Override
+	        public void endElement(String uri, String localName, String qName){
+	            addTextIfNeeded();
+	            Element closedEl = elementStack.pop();
+	            if (elementStack.isEmpty()) { // Is this the root element?
+	                doc.appendChild(closedEl);
+	            } else {
+	                Element parentEl = elementStack.peek();
+	                parentEl.appendChild(closedEl);                   
+	            }
+	        }
+	        
+	        @Override
+	        public void characters (char ch[], int start, int length) throws SAXException {
+	            textBuffer.append(ch, start, length);
+	        }
+	        
+	        // Outputs text accumulated under the current node
+	        private void addTextIfNeeded() {
+	            if (textBuffer.length() > 0) {
+	                Element el = elementStack.peek();
+	                Node textNode = doc.createTextNode(textBuffer.toString());
+	                el.appendChild(textNode);
+	                textBuffer.delete(0, textBuffer.length());
+	            }
+	        }           
+	    };
+	    parser.parse(is, handler);
+	    
+	    return doc;
+	}   
 
 }
