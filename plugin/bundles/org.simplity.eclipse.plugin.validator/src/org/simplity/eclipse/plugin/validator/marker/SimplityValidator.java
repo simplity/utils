@@ -17,7 +17,7 @@ public class SimplityValidator extends AbstractValidator {
 
 	@Override
 	public ValidationResult validate(IResource resource, int kind, ValidationState validationState, IProgressMonitor progressMonitor) {
-		String compRoot = "D:/WorkSpace/SimplityPluginRuntime/SimplityTest/src/main/resources/comp";
+		String compRoot = resource.getProject().findMember("src/main/resources/comp").getLocation().toString();
 		CompsManager.loadResources(compRoot);
 		
 		ValidationResult validationResult = new ValidationResult();

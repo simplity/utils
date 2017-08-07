@@ -15,5 +15,6 @@
 		<module>template</module>
 		<module>test</module>
 	    <module>refactoring</module>
+		<module>plugin</module>
   </modules>
 </project>

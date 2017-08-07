@@ -15,6 +15,6 @@
     </parent>
 
     <modules>
-        <module>update</module>
+        <module>org.simplity.eclipse.plugin.update</module>
     </modules>
 </project>
