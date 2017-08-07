@@ -98,7 +98,7 @@ public class Comp {
 		} else if (underlyingObject instanceof Application) {
 			((Application) underlyingObject).validate(vtx);
 		} else {
-			logger.error(" We do not know how to validate an object of lass " + underlyingObject.getClass().getName());
+			logger.error(" We do not know how to validate an object of class " + underlyingObject.getClass().getName());
 
 			this.compExists = false;
 		}

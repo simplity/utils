@@ -83,7 +83,6 @@ public class ValidationCtx extends ValidationContext {
 	 */
 	@Override
 	public void addError(String error) {
-		logger.info("An error is being added = " + error);
 		if (this.compBeingValidated == null) {
 			logger.error("Error message being added without a call to startValidation(). " + error);
 		} else if(this.needsValidation){
