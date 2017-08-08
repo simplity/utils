@@ -158,7 +158,10 @@ public class Comp {
 		Comp comp = CompsManager.getRefComp(refType, refName);
 		boolean added = this.compsUsed.add(comp);
 		if (duringValidation && added && comp.compExists == false) {
-			this.addError("Resource of type " + refType + " with name " + refName + " does not exist");
+			if(refName == null || refName.isEmpty())
+				this.addError("Resource of type " + refType + " is required exist");
+			else
+				this.addError("Resource of type " + refType + " with name " + refName + " does not exist");
 		}
 	}
 
