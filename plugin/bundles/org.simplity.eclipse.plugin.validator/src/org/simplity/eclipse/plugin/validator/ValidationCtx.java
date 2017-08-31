@@ -22,9 +22,12 @@
 
 package org.simplity.eclipse.plugin.validator;
 
+import java.util.Stack;
+import java.util.logging.Logger;
+
+import org.simplity.kernel.ApplicationError;
 import org.simplity.kernel.comp.ComponentType;
 import org.simplity.kernel.comp.ValidationContext;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -44,6 +47,9 @@ public class ValidationCtx extends ValidationContext {
 
 	private boolean needsValidation;
 
+	private String currentTag;
+
+	private Stack<String> pendingTags = new Stack<String>();
 	/**
 	 *
 	 */
@@ -223,5 +229,31 @@ public class ValidationCtx extends ValidationContext {
 			this.addReference(ComponentType.SERVICE, serviceName);
 		}
 		return false;
+	}
+
+	@Override
+	public void beginTag(String tagName) {
+		if(this.compBeingValidated == null){
+			throw new ApplicationError("Tag " + tagName + " is added when there is no component being validated");
+		}
+		if(this.currentTag != null){
+			this.pendingTags.push(this.currentTag);
+		}
+		this.currentTag = tagName;
+	}
+
+	@Override
+	public void endTag(String tagName) {
+		if(this.currentTag == null){
+			throw new ApplicationError("Tag " + tagName + " is getting ended, but the tag was never started");
+		}
+		if(!this.currentTag.equalsIgnoreCase(tagName)){
+			throw new ApplicationError("Tag " + tagName + " is getting ended, but the current tag is " + this.currentTag + ". Note that child-tags can not over-lap, but have to be fully enclosed within teh parent tag.");
+		}
+		if(this.pendingTags.isEmpty()){
+			this.currentTag = null;
+		}else{
+			this.currentTag = this.pendingTags.pop();
+		}
 	}
 }
