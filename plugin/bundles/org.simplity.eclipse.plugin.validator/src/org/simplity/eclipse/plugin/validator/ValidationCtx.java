@@ -23,12 +23,12 @@
 package org.simplity.eclipse.plugin.validator;
 
 import java.util.Stack;
-import java.util.logging.Logger;
 
 import org.simplity.kernel.ApplicationError;
 import org.simplity.kernel.comp.ComponentType;
 import org.simplity.kernel.comp.ValidationContext;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * temporarily designed to extend ValidationContext to avoid any changes to that
@@ -91,11 +91,30 @@ public class ValidationCtx extends ValidationContext {
 	public void addError(String error) {
 		if (this.compBeingValidated == null) {
 			logger.error("Error message being added without a call to startValidation(). " + error);
-		} else if(this.needsValidation){
-			this.compBeingValidated.addError(error);
+		} else if(this.needsValidation) {
+			String row = pendingTags + "~" + error;
+			System.out.println("Error message - " + row);
+			this.compBeingValidated.addError(row);
 		}
 	}
 
+	/**
+	 * add an error message
+	 *
+	 * @param error
+	 * @param tagName
+	 * @param attributeName
+	 */
+	public void addError(String error, String tagName, String attributeName) {
+		if (this.compBeingValidated == null) {
+			throw new ApplicationError("Error message being added without a call to startValidation(). " + error);
+		} else if(this.needsValidation) {
+			//String[] row = { this.currentType, this.currentCompName, error };
+			String row = tagName + "~" + attributeName+ "~" + error;
+			this.compBeingValidated.addError(row);
+		}
+	}
+	
 	/**
 	 * Report an unusual setting that is not an error, but perhaps requires some
 	 * ones review to confirm that this is indeed by design and not by error or
@@ -123,7 +142,7 @@ public class ValidationCtx extends ValidationContext {
 		if (this.compBeingValidated == null) {
 			logger.error("referecne being added without a call to startValidation(). ");
 		} else {
-			this.compBeingValidated.addReferredComp(refType, refName, this.needsValidation);
+			this.compBeingValidated.addReferredComp(refType, refName, this.needsValidation, this.pendingTags);
 		}
 	}
 
@@ -231,29 +250,34 @@ public class ValidationCtx extends ValidationContext {
 		return false;
 	}
 
-	@Override
+	//@Override
 	public void beginTag(String tagName) {
 		if(this.compBeingValidated == null){
 			throw new ApplicationError("Tag " + tagName + " is added when there is no component being validated");
 		}
-		if(this.currentTag != null){
-			this.pendingTags.push(this.currentTag);
-		}
+		//if(this.currentTag != null){
+		//	this.pendingTags.push(this.currentTag);
+		//}
+		this.pendingTags.push(tagName);
 		this.currentTag = tagName;
 	}
 
-	@Override
+	//@Override
 	public void endTag(String tagName) {
-		if(this.currentTag == null){
+		if(this.currentTag == null) {
 			throw new ApplicationError("Tag " + tagName + " is getting ended, but the tag was never started");
 		}
-		if(!this.currentTag.equalsIgnoreCase(tagName)){
+		if(!this.currentTag.equalsIgnoreCase(tagName)) {
 			throw new ApplicationError("Tag " + tagName + " is getting ended, but the current tag is " + this.currentTag + ". Note that child-tags can not over-lap, but have to be fully enclosed within teh parent tag.");
 		}
-		if(this.pendingTags.isEmpty()){
+		if(this.pendingTags.isEmpty()) {
 			this.currentTag = null;
-		}else{
-			this.currentTag = this.pendingTags.pop();
+		}else {
+			this.pendingTags.pop();
+			if(!this.pendingTags.isEmpty())
+				this.currentTag = this.pendingTags.lastElement();
+			else
+				this.currentTag = null;
 		}
 	}
 }

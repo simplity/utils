@@ -24,6 +24,7 @@ package org.simplity.eclipse.plugin.validator;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Stack;
 
 import org.simplity.kernel.Application;
 import org.simplity.kernel.comp.Component;
@@ -151,17 +152,21 @@ public class Comp {
 	 *            if true, an error message is added if the component does not
 	 *            exist. Repeat errors are avoided for a comp
 	 */
-	public void addReferredComp(ComponentType refType, String refName, boolean duringValidation) {
+	public void addReferredComp(ComponentType refType, String refName, boolean duringValidation, Stack<String> pendingTags) {
 		if (this.compsUsed == null) {
 			this.compsUsed = new HashSet<Comp>();
 		}
 		Comp comp = CompsManager.getRefComp(refType, refName);
 		boolean added = this.compsUsed.add(comp);
 		if (duringValidation && added && comp.compExists == false) {
-			if(refName == null || refName.isEmpty())
+			if(refName == null || refName.isEmpty()) {
 				this.addError("Resource of type " + refType + " is required exist");
-			else
-				this.addError("Resource of type " + refType + " with name " + refName + " does not exist");
+			}
+			else {
+				String error = "Resource of type " + refType + " with name " + refName + " does not exist ~ " + refName.toString() + "&" + refType.toString();
+				String row = pendingTags.toString() + "~" + "attributeName"+ "~" + error;
+				this.addError(row);
+			}
 		}
 	}
 
