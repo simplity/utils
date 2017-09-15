@@ -6,7 +6,7 @@
     </testCase>
 
     <testCase serviceName="helloworld" testCaseName="helloworldtest1">
-    <outputJson><![CDATA[ {"hello":"Hello World34!","_messages":[]}]]></outputJson>
+    <outputJson><![CDATA[ {"hello":"Hello World!","_messages":[]}]]></outputJson>
     </testCase>   
   </testCases>
 </testRun>
