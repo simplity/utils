@@ -1,0 +1,87 @@
+
+\squid:S1125˜")Remove the literal "false" boolean value.(ÄÏşÇùÿÿÿÿHùwRMINORZ
+CODE_SMELL
+ssquid:S2147Ú"ECombine this catch with the one at line 472, which has the same body.(Å¡ßHúwRMINORZ
+CODE_SMELL
+Œsquid:S2293¤"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÌçùĞşÿÿÿÿHûwRMINORZ
+CODE_SMELL
+Œsquid:S2293Ô"YReplace the type specification in this constructor call with the diamond operator ("<>").(™õÒúÿÿÿÿHüwRMINORZ
+CODE_SMELL
+lsquid:S2629Ã"7Use the built-in formatting to construct this argument.(¯Ìø8ÅÆİÛÛ+HıwRMAJORZ
+CODE_SMELL
+†squid:S2293ó"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ä‡ÿHşwRMINORZ
+CODE_SMELL
+|squid:S1192Ì"FDefine a constant instead of duplicating this literal "file " 3 times.(Êõ•€ÿÿÿÿÿHÿwRCRITICALZ
+CODE_SMELL
+\squid:S1125Ã")Remove the literal "false" boolean value.(îÂüøùÿÿÿÿH€xRMINORZ
+CODE_SMELL
+lsquid:S2259}"AA "NullPointerException" could be thrown; "cpu" is nullable here.(İÈ¸ŞÿÿÿÿÿHxRMAJORZBUG
+ssquid:S2147×"ECombine this catch with the one at line 341, which has the same body.(Å¡ßH‚xRMINORZ
+CODE_SMELL
+Wsquid:S1125")Remove the literal "false" boolean value.(û²HƒxRMINORZ
+CODE_SMELL
+‡squid:S2293Õ"YReplace the type specification in this constructor call with the diamond operator ("<>").(«‘·¾H„xRMINORZ
+CODE_SMELL
+Wsquid:S1125±")Remove the literal "false" boolean value.(Â¹™˜H…xRMINORZ
+CODE_SMELL
+Wsquid:S1125Ì")Remove the literal "false" boolean value.(÷İ€H†xRMINORZ
+CODE_SMELL
+qsquid:S2629ø"7Use the built-in formatting to construct this argument.(¡ÅÍĞşÿÿÿÿ8ÅÆİÛÛ+H‡xRMAJORZ
+CODE_SMELL
+lsquid:S2629Œ"7Use the built-in formatting to construct this argument.(«¹Ó–8ÅÆİÛÛ+HˆxRMAJORZ
+CODE_SMELL
+wsquid:S1192‚"FDefine a constant instead of duplicating this literal "File " 6 times.(–¶÷…H‰xRCRITICALZ
+CODE_SMELL
+Ssquid:S1168"&Return an empty array instead of null.(¥¹ïHŠxRMAJORZ
+CODE_SMELL
+Wsquid:S1125¾")Remove the literal "false" boolean value.(ØÕ‚—H‹xRMINORZ
+CODE_SMELL
+qsquid:S2629ï"7Use the built-in formatting to construct this argument.(ôú½ƒÿÿÿÿÿ8ÅÆİÛÛ+HŒxRMAJORZ
+CODE_SMELL
+Ÿsquid:S1192Ö"iDefine a constant instead of duplicating this literal "Unable to create an instance from class " 4 times.(‡æÃ©øÿÿÿÿHxRCRITICALZ
+CODE_SMELL
+‘squid:S2629Á"\Invoke method(s) only conditionally. Use the built-in formatting to construct this argument.(‘¥÷8ÅÆİÛÛ+HxRMAJORZ
+CODE_SMELL
+ksquid:S2629"7Use the built-in formatting to construct this argument.(Öµş8ÅÆİÛÛ+HxRMAJORZ
+CODE_SMELL
+ksquid:S2629û"7Use the built-in formatting to construct this argument.(§ıâ@8ÅÆİÛÛ+HxRMAJORZ
+CODE_SMELL
+qsquid:S2629Ì"7Use the built-in formatting to construct this argument.(Êõ•€ÿÿÿÿÿ8ÅÆİÛÛ+H‘xRMAJORZ
+CODE_SMELL
+†
+squid:S135ÿ"YReduce the total number of break and continue statements in this loop to use at most one.(š˜¦ÇH’xRMINORZ
+CODE_SMELL
+\squid:S1125¹")Remove the literal "false" boolean value.(àà§şıÿÿÿÿH“xRMINORZ
+CODE_SMELL
+\squid:S1125")Remove the literal "false" boolean value.(ÁçÚ¾ûÿÿÿÿH”xRMINORZ
+CODE_SMELL
+qsquid:S2629Ä"7Use the built-in formatting to construct this argument.(¢¡§«şÿÿÿÿ8ÅÆİÛÛ+H•xRMAJORZ
+CODE_SMELL
+\squid:S1125å")Remove the literal "false" boolean value.(àÖ¢ÓÿÿÿÿÿH–xRMINORZ
+CODE_SMELL
+Wsquid:S1125Ë")Remove the literal "false" boolean value.(ÙÍõH—xRMINORZ
+CODE_SMELL
+‡squid:S2293Ó"YReplace the type specification in this constructor call with the diamond operator ("<>").(·ÅØH˜xRMINORZ
+CODE_SMELL
+\squid:S1125Á")Remove the literal "false" boolean value.(á®€ŸıÿÿÿÿH™xRMINORZ
+CODE_SMELL
+\squid:S1125˜")Remove the literal "false" boolean value.(ÄÏşÇùÿÿÿÿHšxRMINORZ
+CODE_SMELL
+ksquid:S2629¿"7Use the built-in formatting to construct this argument.(¤ùŸM8ÅÆİÛÛ+H›xRMAJORZ
+CODE_SMELL
+lsquid:S2629Ò"7Use the built-in formatting to construct this argument.(ĞÏĞÇ8ÅÆİÛÛ+HœxRMAJORZ
+CODE_SMELL
+\squid:S1125í")Remove the literal "false" boolean value.(Õª¾ÆûÿÿÿÿHxRMINORZ
+CODE_SMELL
+\squid:S1125ÿ")Remove the literal "false" boolean value.(‰ÍôûÿÿÿÿHxRMINORZ
+CODE_SMELL
+†
+squid:S135µ"YReduce the total number of break and continue statements in this loop to use at most one.(§Øû¬HŸxRMINORZ
+CODE_SMELL
+lsquid:S2629‚"7Use the built-in formatting to construct this argument.(–¶÷…8ÅÆİÛÛ+H xRMAJORZ
+CODE_SMELL
+‹
+squid:S135ä"YReduce the total number of break and continue statements in this loop to use at most one.(åíÈ†şÿÿÿÿH¡xRMINORZ
+CODE_SMELL
+Œsquid:S2293°"YReplace the type specification in this constructor call with the diamond operator ("<>").(åõÍíúÿÿÿÿH¢xRMINORZ
+CODE_SMELL

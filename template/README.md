@@ -6,16 +6,6 @@
 
 - Configure the DB and template details in pom.xml of your project as follows
 
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.3.171</version>
-		</dependency>
-		<dependency>
-			<groupId>org.simplity.utils</groupId>
-			<artifactId>template</artifactId>
-			<version>1.2-SNAPSHOT</version>
-		</dependency>
 		<build>
 			<plugins>
 				<plugin>
@@ -31,7 +21,7 @@
 							</goals>
 							<configuration>
 								<packaging>classpath</packaging>
-								<configPackage>com.infosys.qreuse.torque.simplity</configPackage>
+								<configPackage>org.simplity.utils.torque</configPackage>
 								<newFileTargetDir>target/generated-schema</newFileTargetDir>
 								<newFileTargetDirUsage>none</newFileTargetDirUsage>
 								<options>
@@ -51,9 +41,9 @@
 							<version>1.3.171</version>
 						</dependency>
 						<dependency>
-							<groupId>com.infosys.qreuse.torque.simplity</groupId>
+							<groupId>org.simplity.utils</groupId>
 							<artifactId>template</artifactId>
-							<version>0.0.1</version>
+							<version>1.2.1-SNAPSHOT</version>
 						</dependency>
 					</dependencies>
 				</plugin>

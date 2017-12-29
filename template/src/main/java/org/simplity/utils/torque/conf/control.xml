@@ -19,7 +19,7 @@
 -->
 <control loglevel="info"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://db.apache.org/torque/4.0/generator/configuration http://db.apache.org/torque/4.0/generator/configuration.xsd"
+    xsi:schemaLocation="http://db.apache.org/torque/4.0/generator/configuration"
     xmlns="http://db.apache.org/torque/4.0/generator/configuration">
 
   <options xsi:type="propertiesOptions" path="options.properties"/>
@@ -36,7 +36,8 @@
         usernameOption="torque.jdbc2schema.user"
         passwordOption="torque.jdbc2schema.password"
         schemaOption="torque.jdbc2schema.schema">
-      <transformer class="org.simplity.utils.torque.transformer.SimplityRecordTransformer"/>
+      <transformer class="org.simplity.utils.torque.transformer.SimplityRecordTransformer">      
+      </transformer>
     </source>
     <outlet name="torque.jdbc2schema"/>
   </output>
