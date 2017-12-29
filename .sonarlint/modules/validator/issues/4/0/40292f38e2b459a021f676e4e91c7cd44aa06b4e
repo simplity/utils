@@ -1,18 +1,0 @@
-
-psquid:S1854,"7Remove this useless assignment to local variable "doc".(³Ô´Àøÿÿÿÿ8á’ìáÛ+HëwRMAJORZ
-CODE_SMELL
-asquid:S1481*"(Remove this unused "doc" local variable.(¶ŸÌ„şÿÿÿÿ8üãàÛ+HåwRMINORZ
-CODE_SMELL
-{squid:S00112K"FDefine and throw a dedicated exception instead of using a generic one.(š…Æ§8á’ìáÛ+HêwRMAJORZ
-CODE_SMELL
-ksquid:S3400!"9Remove this method and declare a constant for this value.(£Š£›ıÿÿÿÿHçwRMINORZ
-CODE_SMELL
-lsquid:S1197o"8Move the array designator from the variable to the type.(Šú÷å8á’ìáÛ+HèwRMINORZ
-CODE_SMELL
-„squid:S1149N"PReplace the synchronized class "Stack" by an unsynchronized one such as "Deque".(”±ßŞ8á’ìáÛ+HìwRMAJORZ
-CODE_SMELL
-_squid:S1148."#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8­õåàÛ+HæwRMINORZVULNERABILITY
-squid:S2293N"YReplace the type specification in this constructor call with the diamond operator ("<>").(”±ßŞ8á’ìáÛ+HéwRMINORZ
-CODE_SMELL
-„squid:CommentedOutCodeLine7"<This block of commented-out lines of code should be removed.(ú¼Âİøÿÿÿÿ8¥İ©âÛ+H­xRMAJORZ
-CODE_SMELL

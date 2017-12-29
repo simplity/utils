@@ -1,9 +1,0 @@
-
-Ösquid:S1450#"XRemove the "selection" field and declare it as a local variable in the relevant methods.(çöâ∑HäkRMINORZ
-CODE_SMELL
-Xsquid:S1905/"+Remove this unnecessary cast to "IProject".(ü©ÇÆHãkRMINORZ
-CODE_SMELL
-wsquid:UselessImportCheck"=Remove this unused import 'org.eclipse.m2e.core.MavenPlugin'.(‚¥îÏHåkRMINORZ
-CODE_SMELL
-Ysquid:S1148é"#Use a logger to log this exception.(Ä…‘Ö˝ˇˇˇˇHçkRMINORZVULNERABILITY
-Tsquid:S1148Æ"#Use a logger to log this exception.(«í«ÍHékRMINORZVULNERABILITY

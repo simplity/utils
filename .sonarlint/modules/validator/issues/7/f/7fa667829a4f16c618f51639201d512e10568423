@@ -1,34 +1,0 @@
-
-nsquid:UnusedPrivateMethod§"2Remove this unused private "deleteMarkers" method.(Ÿ—§H¾lRMAJORZ
-CODE_SMELL
-osquid:UnusedPrivateMethod¶".Remove this unused private "getParser" method.(€›ÇıÿÿÿÿH¿lRMAJORZ
-CODE_SMELL
-n"squid:SwitchLastCaseIsDefaultCheck%""Add a default case to this switch.(æ‹ØÎüÿÿÿÿHÀlRCRITICALZ
-CODE_SMELL
-ysquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(¢ãøHÁlRMAJORZ
-CODE_SMELL
-e
-squid:S106œ"9Replace this use of System.out or System.err by a logger.(‹¥·YHÂlRMAJORZ
-CODE_SMELL
-tsquid:S1226f"GIntroduce a new variable instead of reusing the parameter "lineNumber".(ìË´ÓHÃlRMINORZ
-CODE_SMELL
-\squid:S1172®".Remove this unused method parameter "monitor".(‰–ç©HÄlRMAJORZ
-CODE_SMELL
-\squid:S1172¿".Remove this unused method parameter "monitor".(¬òHÅlRMAJORZ
-CODE_SMELL
-Ssquid:S1168"&Return an empty array instead of null.(¥¹ïHÆlRMAJORZ
-CODE_SMELL
-Wsquid:S00108i")Either remove or fill this block of code.(ùÜ²—HÇlRMAJORZ
-CODE_SMELL
-]squid:S00108ª")Either remove or fill this block of code.(²ÊÌ¿şÿÿÿÿHÈlRMAJORZ
-CODE_SMELL
-Xsquid:S00108²")Either remove or fill this block of code.(ùÜ²—HÉlRMAJORZ
-CODE_SMELL
-gsquid:S1161L":Add the "@Override" annotation above this method signature(—‘ŞHÊlRMAJORZ
-CODE_SMELL
-lsquid:S1161P":Add the "@Override" annotation above this method signature(è¤áşÿÿÿÿHËlRMAJORZ
-CODE_SMELL
-lsquid:S1161T":Add the "@Override" annotation above this method signature(æ‰ùÇüÿÿÿÿHÌlRMAJORZ
-CODE_SMELL
-hsquid:S1161‚":Add the "@Override" annotation above this method signature(À£«‡HÍlRMAJORZ
-CODE_SMELL
