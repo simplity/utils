@@ -58,7 +58,7 @@
 	    	
 	    	<command
 	    		commandId="org.simplity.eclipse.plugin.validator.addRemoveSampleNature"
-	    		label="Enable Simplity builder"
+	    		label="Enable Simplity Nature"
 	    		style="push">
 	    		<visibleWhen checkEnabled="false">
 	    			<with variable="selection">
@@ -107,21 +107,21 @@
             descriptionImage="icons/wizards/newfile_wiz.gif"
             icon="icons/objects/x.gif"
             id="org.simplity.eclipse.plugin.validator.xmlfile.NewApplicationWizard"
-            name="Simplity Application Xml"/>
+            name="Application"/>
         <wizard
 			category="simplity"
             class="org.simplity.eclipse.plugin.validator.wizard.NewServiceXmlWizard"
             descriptionImage="icons/wizards/newfile_wiz.gif"
             icon="icons/objects/x.gif"
             id="org.simplity.eclipse.plugin.validator.xmlfile.NewServiceWizard"
-            name="Simplity Service"/>
+            name="Service"/>
         <wizard
 			category="simplity"
             class="org.simplity.eclipse.plugin.validator.wizard.NewRecordXmlWizard"
             descriptionImage="icons/wizards/newfile_wiz.gif"
             icon="icons/objects/x.gif"
             id="org.simplity.eclipse.plugin.validator.xmlfile.NewRecordWizard"
-            name="Simplity Record"/>
+            name="Record"/>
 	</extension>
 	
 	<extension
@@ -263,5 +263,16 @@
 			</include>
 		</validator>
 	</extension>
-
+	
+	<extension id="simplityValidator" name="%_UI_XML_SCHEMA_VALIDATOR" point="org.eclipse.wst.validation.validator">
+		<validator>
+			<filter	objectClass="org.eclipse.core.resources.IFile" caseSensitive="false" nameFilter="*.xml">
+			</filter>
+			<helper class="org.eclipse.wst.xml.core.internal.validation.core.Helper">
+			</helper>
+			<run class="org.eclipse.wst.xsd.ui.internal.validation.Validator">
+			</run>
+		</validator>
+	</extension>
+	
 </plugin>
