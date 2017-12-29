@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/SimplityValidatorFeature_1.0.0.201712291346.jar" id="SimplityValidatorFeature" version="1.0.0.201712291346">
+      <category name="Validator"/>
+   </feature>
+   <category-def name="Validator" label="Validator">
+      <description>
+         Simplity validator
+      </description>
+   </category-def>
+</site>
